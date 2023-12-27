@@ -1,4 +1,4 @@
-package in.reqres.homework;
+package in.reqres.get;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -38,8 +38,8 @@ public class GetListUsers {
 
     @Test
     public void getListUsersWayBdd() {
-        RestAssured.baseURI = "https://reqres.in/api/users?page=2";
-        requestSpecification = RestAssured.given().log().all();
+        RestAssured.baseURI = "https://reqres.in/api/users";
+        requestSpecification = RestAssured.given().queryParam("page",2).log().all();
         response = requestSpecification.get();
         response.then().log().all(); //for log purpose you need to use then
         //System.out.println(response.prettyPrint());
@@ -60,5 +60,22 @@ public class GetListUsers {
                 .body("data[2].first_name", equalTo("Tobias"))
                 .body("data[2].last_name", equalTo("Funke"));
     }
+
+    @Test
+    public void verifyUserDetailsBdd() {
+        RestAssured.baseURI="https://reqres.in/api/users?page=2";
+        requestSpecification = RestAssured.given().queryParam("page",2).log().all();
+        response = requestSpecification.get();
+        validatableResponse = response.then().log().all(); //for log purpose you need to use then
+        //System.out.println(response.prettyPrint());
+        String statusLine = response.getStatusLine();
+        Assert.assertEquals(statusLine, "HTTP/1.1 200 OK");
+        int statusCode = response.getStatusCode();
+        Assert.assertEquals(statusCode, 200);
+        validatableResponse.body("data[2].id", equalTo(9));
+        validatableResponse.body("data[2].first_name", equalTo("Tobias"));
+        validatableResponse.body("data[2].last_name", equalTo("Funke"));
+    }
+
 
 }

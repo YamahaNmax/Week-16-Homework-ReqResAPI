@@ -1,4 +1,4 @@
-package in.reqres.homework;
+package in.reqres.get;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
